@@ -5,6 +5,8 @@ require __DIR__ . "/vendor/autoload.php";
 
 ## CONNECTEZ VOUS A VOTRE BASE DE DONNEE
 
+$pdo = new PDO('mysql:host=127.0.0.1;dbname=td_php', "root", "");
+
 ## ETAPE 1
 
 ## RECUPERER TOUT LES PERSONNAGES CONTENU DANS LA TABLE personnages
@@ -28,10 +30,9 @@ require __DIR__ . "/vendor/autoload.php";
 
 ?>
 
-
 <!doctype html>
 <html lang="en">
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -39,17 +40,41 @@ require __DIR__ . "/vendor/autoload.php";
     <title>Rendu Php</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-<body>
-<nav class="nav mb-3">
-    <a href="./rendu.php" class="nav-link">Acceuil</a>
+    </head>
+    <body>
+    <nav class="nav mb-3">
+    <a href="./rendu.php" class="nav-link">Accueil</a>
     <a href="./personnage.php" class="nav-link">Mes Personnages</a>
     <a href="./combat.php" class="nav-link">Combats</a>
-</nav>
-<h1>Mes personnages</h1>
-<div class="w-100 mt-5">
+    </nav>
+    <h1>Mes personnages</h1>
+        <div class="w-100 mt-5">
 
-</div>
 
-</body>
+
+    <?php
+
+    $perso=$pdo->prepare('SELECT * FROM personnages');
+
+    $perso->execute();
+
+    $all = $perso->fetchAll(PDO::FETCH_OBJ);
+
+    if (!empty($all)):
+
+        foreach ($all as $key => $value): ?>
+
+            <tr>
+                <td>name : <?php echo $value->name; ?></td>
+                <td>atk : <?php echo $value->atk; ?></td>
+                <td>pv : <?php echo $value->pv; ?></td>
+                <td>stars : <?php echo $value->stars; ?></td>
+                <br>
+            </tr>
+        <?php endforeach;
+    endif;
+    ?>
+
+        </div>
+    </body>
 </html>
